@@ -421,17 +421,18 @@ private void addSpecifiedPorts(String names, int PortType)
       String file_loc = null;
       // Old style: properties file must be in JRE folder
       String ext_dirs = System.getProperty("java.ext.dirs");
-      String[] dirArray = ext_dirs.split(System.getProperty("path.separator"));
-      for (int i = 0; i < dirArray.length; i++)
-         {
-         String file_name = dirArray[i] + System.getProperty("file.separator") + "gnu.io.rxtx.properties";
-         File file = new File(file_name);
-         if (file.exists())
-            {
-            file_loc = file_name;
-            break;
-            }
-         }
+      // In the high version of JDK (like JDK11), the ext_dirs's value is null
+      if(ext_dirs!=null && ext_dirs.isEmpty()){
+		  String[] dirArray = ext_dirs.split(System.getProperty("path.separator"));
+		  for (int i = 0; i < dirArray.length; i++){
+			  String file_name = dirArray[i] + System.getProperty("file.separator") + "gnu.io.rxtx.properties";
+			  File file = new File(file_name);
+			  if (file.exists()){
+				  file_loc = file_name;
+				  break;
+			  }
+		  }
+	  }
       if (file_loc != null)
          {
          FileInputStream in = null;
